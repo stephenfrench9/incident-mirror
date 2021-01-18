@@ -8,6 +8,7 @@ import hashlib
 import hmac
 import json
 import os
+from pdpyras import APISession
 from slack_sdk.web import WebClient
 from time import time
 import ssl as ssl_lib
@@ -18,10 +19,45 @@ theposted = {}
 
 ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
 slack_web_client = WebClient(token=os.environ['SLACK_BOT_TOKEN'], ssl=ssl_context)
+api_token = 'hqknWMvx5yqrtJ_ZA3Xu'
+session = APISession(api_token)
+
+
+def pdapi(request):
+    print("\n\n")
+    # Using requests.Session.get:
+    # https://dev-invitae.pagerduty.com/users/P9D59A6
+    response = session.get('/users/P9D59A6')
+    print("dir(response): ", dir(response))
+    print("type(response): ", type(response))
+    print("type(response.json)", type(response.json))
+    user = None
+    if response.ok:
+        user = response.json()['user']
+        print("dir(user): ", dir(user))
+        print("type(user): ", type(user))
+        print("type(user.items())", type(user.items()))
+    print("\niterate over user")
+    for k, v in user.items():
+        print(k, v)
+    print("")
+    print("type(response.json()): ", type(response.json()))
+    print("response.json(): ", response.json())
+    print("*************************************************")
+    for k, v in response.json()["user"].items():
+        print(k, v)
+
+
+
+
+
+    # Or, more succinctly:
+    user = session.rget('/users/P9D59A6')
+
+    return HttpResponse("this is the pdapi endpoint")
 
 
 # Create your views here.
-
 def hash_matches_signature(body, timestamp, signature):
     print("def hash_and_compare")
     prefix = str.encode("v0:" + str(timestamp) + ":")
@@ -138,11 +174,11 @@ def pagerdutywebhook(request):
             "text": {
                 "type": "mrkdwn",
                 "text": (
-                    value['title'] + "\n\n" \
-                    + key + "\n\n" \
-                    + " *Status*: " + value['status'] + "\n\n" \
-                    + "https://heuristicsteamgroup.slack.com/archives/" + channel_ids[
-                        value["service-name"].replace(" ", "-") + "_inc_" + str(v['incident_number'])]
+                        value['title'] + "\n\n" \
+                        + key + "\n\n" \
+                        + " *Status*: " + value['status'] + "\n\n" \
+                        + "https://heuristicsteamgroup.slack.com/archives/" + channel_ids[
+                            value["service-name"].replace(" ", "-") + "_inc_" + str(v['incident_number'])]
                 ),
             },
         }

@@ -11,4 +11,7 @@ urlpatterns = [
 
     # /incident-manager/challenge/
     path('challenge/', view=views.challenge, name='challenge'),
+
+    # /incident-manager/pdapi/
+    path('pdapi/', view=views.pdapi, name='pdapi'),
 ]

@@ -1,0 +1,3 @@
+pip3 install certifi
+pip3 install pdpyras
+pip3 install slack-sdk

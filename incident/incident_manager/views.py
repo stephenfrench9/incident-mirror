@@ -19,7 +19,8 @@ theposted = {}
 
 ssl_context = ssl_lib.create_default_context(cafile=certifi.where())
 slack_web_client = WebClient(token=os.environ['SLACK_BOT_TOKEN'], ssl=ssl_context)
-api_token = 'hqknWMvx5yqrtJ_ZA3Xu'
+signing_secret = os.environ["SLACK_SIGNING_SECRET"]
+api_token = os.environ["INCIDENT_MANAGER_PAGERDUTY_API_ACCESS_KEY"]
 session = APISession(api_token)
 
 
@@ -61,7 +62,6 @@ def pdapi(request):
 def hash_matches_signature(body, timestamp, signature):
     print("def hash_and_compare")
     prefix = str.encode("v0:" + str(timestamp) + ":")
-    signing_secret = os.environ["SLACK_SIGNING_SECRET"]
     request_hash = 'v0=' + hmac.new(
         str.encode(signing_secret),
         prefix + body,

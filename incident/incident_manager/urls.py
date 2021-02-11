@@ -4,14 +4,14 @@ from . import views
 
 urlpatterns = [
     # /incident-manager/accept-pagerduty-webhook/
-    path('accept-pagerduty-webhook/', view=views.pagerdutywebhook, name='pagerdutywebhook'),
+    path('accept-pagerduty-webhook/', view=views.pagerduty_webhook, name='pagerdutywebhook'),
 
     # /incident-manager/post-to-slack/
-    path('post-to-slack/', view=views.posttoslack, name='posttoslack'),
+    path('post-to-slack/', view=views.post_to_slack, name='post_to_slack'),
 
     # /incident-manager/challenge/
     path('challenge/', view=views.challenge, name='challenge'),
 
     # /incident-manager/pdapi/
-    path('pdapi/', view=views.pdapi, name='pdapi'),
+    path('pd-api/', view=views.pd_api, name='pd_api'),
 ]

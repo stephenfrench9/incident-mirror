@@ -23,7 +23,11 @@ signing_secret = os.environ["SLACK_SIGNING_SECRET"]
 api_token = os.environ["INCIDENT_MANAGER_PAGERDUTY_API_ACCESS_KEY"]
 session = APISession(api_token)
 
-def pdapi(request):
+def pd_api(request):
+    print("def pd_api(request)")
+    # if not valid_signature(request):
+    #     return HttpResponseForbidden()
+
     objecttype = "escalation_policies"
     objecttype = "incidents"
     objecttype = "oncalls"
@@ -40,7 +44,6 @@ def pdapi(request):
     return HttpResponse(json.dumps(["Team Members in the Dev Account"] + res, indent=4))
 
 
-# Create your views here.
 def hash_matches_signature(body, timestamp, signature):
     print("def hash_and_compare")
     prefix = str.encode("v0:" + str(timestamp) + ":")
@@ -101,10 +104,10 @@ def valid_signature(request):
     return hash_matches_signature(request.body, req_timestamp, req_signature)
 
 
-def pagerdutywebhook(request):
-    print('def pagerdutywebhook(request):')
-    if not valid_signature(request):
-        return HttpResponseForbidden()
+def pagerduty_webhook(request):
+    print('def pagerduty_webhook(request):')
+    # if not valid_signature(request):
+    #     return HttpResponseForbidden()
 
     final_di = json.loads(request.body.decode())
     response = slack_web_client.conversations_list()
@@ -201,42 +204,41 @@ def challenge(request):
     return HttpResponse("got it")
 
 
-def posttoslack(request):
-    print("def posttoslack(request)")
+def post_to_slack(request):
+    print("def post_to_slack(request):")
     # if not valid_signature(request):
     #     return HttpResponseForbidden()
 
-    NOTIFICATION_BLOCK = {
+    INTRO = {
         "type": "section",
         "text": {
             "type": "mrkdwn",
             "text": (
-                "notification notification"
+                "Hello!! :wave:"
             ),
         },
     }
-    WELCOME_BLOCK = {
+    BODY = {
         "type": "section",
         "text": {
             "type": "mrkdwn",
             "text": (
-                "This is a post from a django server. :blush:\n\n"
-                "*Ich bin nich sicher:*"
+                "*This is a post from a django server.* :blush:\n\n"
             ),
         },
     }
 
-    messagel = {
+    message = {
         "ts": "",
-        "channel": "C01FC8SKVKJ",
+        "channel": "C01FXT4N3T9",
         "username": "",
         "icon_emoji": "",
-        "text": ":pizza:die battieren meines Handys ist fast leer",
+        "text": ":pizza: This text is the notification text",
         "blocks": [
-            NOTIFICATION_BLOCK,
-            WELCOME_BLOCK,
+            INTRO,
+            BODY,
         ],
     }
 
-    slack_web_client.chat_postMessage(**messagel)
-    return HttpResponse("This is the logic that posts to slack")
+    slack_web_client.chat_postMessage(**message)
+    return HttpResponse("You just posted a message to Slack.")

@@ -1,4 +1,4 @@
-#Slack App
+# Slack App
 
 ## Prepare Environment
 
@@ -9,7 +9,9 @@ export INCIDENT_MANAGER_PAGERDUTY_API_ACCESS_KEY=""
 ```
 
 [SLACK_SIGNING_SECRET can be found here](https://api.slack.com/apps/A01NKJX118Q/general?)
+
 [SLACK_BOT_TOKEN can be found here](https://api.slack.com/apps/A01NKJX118Q/oauth?)
+
 [INCIDENT_MANAGER_PAGERDUTY_API_ACCESS_KEY can be found here](https://dev-invitae.pagerduty.com/api_keys)
 
 ## Start the Django Server

@@ -23,39 +23,21 @@ signing_secret = os.environ["SLACK_SIGNING_SECRET"]
 api_token = os.environ["INCIDENT_MANAGER_PAGERDUTY_API_ACCESS_KEY"]
 session = APISession(api_token)
 
-
 def pdapi(request):
-    print("\n\n")
-    # Using requests.Session.get:
-    # https://dev-invitae.pagerduty.com/users/P9D59A6
-    response = session.get('/users/P9D59A6')
-    print("dir(response): ", dir(response))
-    print("type(response): ", type(response))
-    print("type(response.json)", type(response.json))
-    user = None
-    if response.ok:
-        user = response.json()['user']
-        print("dir(user): ", dir(user))
-        print("type(user): ", type(user))
-        print("type(user.items())", type(user.items()))
-    print("\niterate over user")
-    for k, v in user.items():
-        print(k, v)
-    print("")
-    print("type(response.json()): ", type(response.json()))
-    print("response.json(): ", response.json())
-    print("*************************************************")
-    for k, v in response.json()["user"].items():
-        print(k, v)
+    objecttype = "escalation_policies"
+    objecttype = "incidents"
+    objecttype = "oncalls"
+    objecttype = "schedules"
+    objecttype = "users"
 
+    params = {"query": "CROP"}
+    params = {"schedule_ids[]": "PPFX2EJ"}  # CROP Weekly Builds
+    params = {"team_ids[]": "P66D71J"}  # CROP 7 Day Support
+    params = {}
 
+    res = session.list_all(objecttype, params=params)
 
-
-
-    # Or, more succinctly:
-    user = session.rget('/users/P9D59A6')
-
-    return HttpResponse("this is the pdapi endpoint")
+    return HttpResponse(json.dumps(["Team Members in the Dev Account"] + res, indent=4))
 
 
 # Create your views here.

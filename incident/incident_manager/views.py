@@ -103,7 +103,7 @@ def valid_signature(request):
     # emit an error if the signature can't be verified
     return hash_matches_signature(request.body, req_timestamp, req_signature)
 
-
+@csrf_exempt
 def pagerduty_webhook(request):
     print('def pagerduty_webhook(request):')
     # if not valid_signature(request):

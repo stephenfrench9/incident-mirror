@@ -51,7 +51,7 @@ curl -H "Content-Type: application/json" --data @incident-trigger-request-body.j
 curl -H "Content-Type: application/json" --data @incident-trigger-request-body-2.json http://127.0.0.1:8000/incident-manager/accept-pagerduty-webhook/
 ```
 
-# Production environment
+# Staging environment
 
 ## Secrets
 same as above

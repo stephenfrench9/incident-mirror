@@ -1,5 +1,3 @@
-# Slack App
-
 # Local Development Environment
 
 ## Secrets

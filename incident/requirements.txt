@@ -1,3 +1,5 @@
 certifi
+django
+gunicorn
 pdpyras
 slack-sdk

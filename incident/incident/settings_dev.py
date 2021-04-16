@@ -25,12 +25,13 @@ SECRET_KEY = '0_rjh7$95bvlvk=2h6lsw6ql(-iev4(ds*ihc01(kbdkvlmdh2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["34.238.244.81", "0.0.0.0"]
+ALLOWED_HOSTS = ["34.238.244.81", "0.0.0.0", "127.0.0.1"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'incident_manager.apps.IncidentManagerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -67,18 +68,22 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'incident.wsgi.application'
+WSGI_APPLICATION = 'incident.wsgi.applicatione'
 
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'incident_manager',
+        'USER': 'developer',
+        'PASSWORD': os.environ['INCIDENT_MANAGER_DB_PASSWORD_DEVELOPER_USER'],
+        'HOST': 'test.ckbossqz7fdb.us-east-1.rds.amazonaws.com',
+        'PORT': '5432',
+    }
+}
 
 
 # Password validation

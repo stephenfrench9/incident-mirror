@@ -19,8 +19,35 @@ export INCIDENT_MANAGER_PAGERDUTY_API_ACCESS_KEY=""
 ```
 # from root of this repo
 cd incident
-pip install requirements.txt
+pip install -r requirements.txt
+export DJANGO_SETTINGS_MODULE="incident.settings_dev"
 python3 manage.py runserver
+```
+
+### Database
+
+passwords and users names created in the following database init then go into `settings.py`
+```
+# CREATE USER developer WITH PASSWORD '';
+# GRANT developer TO postgres
+# CREATE DATABASE incident_manager WITH OWNER developer ENCODING 'utf-8';
+```
+
+```
+python3 manage.py makemigrations incident_manager
+python3 manage.py migrate incident_manager
+python3 manage.py showmigrations incident_manager
+python3 manage.py sqlmigrate incident_manager 0001
+```
+
+```
+curl -v http://127.0.0.1:8000/incident-manager/read/
+curl -v http://127.0.0.1:8000/incident-manager/write/
+```
+
+```
+psql 'postgresql://postgres:'$INCIDENT_MANAGER_DB_PASSWORD_POSTGRES_USER'@test.ckbossqz7fdb.us-east-1.rds.amazonaws.com/incident_manager'
+select * from incident_manager_incident;
 ```
 
 ### Query the PagerDuty API and display results

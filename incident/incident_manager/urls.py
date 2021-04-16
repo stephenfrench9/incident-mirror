@@ -14,4 +14,10 @@ urlpatterns = [
 
     # /incident-manager/pdapi/
     path('pd-api/', view=views.pd_api, name='pd_api'),
+
+    # /incident-manager/write/
+    path('write/', view=views.write, name='write'),
+
+    # /incident-manager/read/
+    path('read/', view=views.read, name='read'),
 ]

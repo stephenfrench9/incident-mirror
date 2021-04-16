@@ -3,8 +3,10 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import hashlib
+from incident_manager.models import Incident
 import hmac
 import json
 import os
@@ -22,6 +24,7 @@ slack_web_client = WebClient(token=os.environ['SLACK_BOT_TOKEN'], ssl=ssl_contex
 signing_secret = os.environ["SLACK_SIGNING_SECRET"]
 api_token = os.environ["INCIDENT_MANAGER_PAGERDUTY_API_ACCESS_KEY"]
 session = APISession(api_token)
+
 
 def pd_api(request):
     print("def pd_api(request)")
@@ -102,6 +105,29 @@ def valid_signature(request):
     # Verify the request signature using the app's signing secret
     # emit an error if the signature can't be verified
     return hash_matches_signature(request.body, req_timestamp, req_signature)
+
+def read(request):
+    oldi = Incident.objects.all()
+    incidents = []
+    print()
+    for inc in oldi:
+        a = (
+            f"\tkey: {inc.key}"
+            f"\n\tquestion: {inc.question_text}"
+            f"\n\tpubdate: {inc.pub_date}"
+            f"\n\n\n"
+        )
+
+        print(a)
+        incidents.append(a)
+
+    return HttpResponse(incidents)
+
+def write(request):
+    newi = Incident(key="bbbbb", pub_date=timezone.now(), question_text="the second one, amend")
+    newi.save()
+    return HttpResponse("Hello, world")
+
 
 @csrf_exempt
 def pagerduty_webhook(request):

@@ -1,6 +1,6 @@
 # Local Development Environment
 
-### Secrets
+### Slack and Pagerduty Secrets
 
 ```
 export SLACK_SIGNING_SECRET=""
@@ -14,30 +14,28 @@ export INCIDENT_MANAGER_PAGERDUTY_API_ACCESS_KEY=""
 
 - [INCIDENT_MANAGER_PAGERDUTY_API_ACCESS_KEY](https://dev-invitae.pagerduty.com/api_keys)
 
-### Start the Django Server
+
+### Configure Database
+
+Start RDS database in AWS console. Get RDS address, username (likely 'postgres'), and password.
 
 ```
-# from root of this repo
-cd incident
-pip install -r requirements.txt
-export DJANGO_SETTINGS_MODULE="incident.settings_dev"
-python3 manage.py runserver
+export INCIDENT_MANAGER_DB_PASSWORD_POSTGRES_USER = <password>
 ```
 
-### Database
-
-passwords and users names created in the following database init then go into `settings.py`
 ```
-# CREATE USER developer WITH PASSWORD '';
+# CREATE USER developer WITH PASSWORD '<developer password>';
 # GRANT developer TO postgres
 # CREATE DATABASE incident_manager WITH OWNER developer ENCODING 'utf-8';
 ```
 
+insert username = 'developer' and password = <developer password> into `settings.py`
+
 ```
 python3 manage.py makemigrations incident_manager
-python3 manage.py migrate incident_manager
 python3 manage.py showmigrations incident_manager
 python3 manage.py sqlmigrate incident_manager 0001
+python3 manage.py migrate incident_manager
 ```
 
 ```
@@ -48,6 +46,16 @@ curl -v http://127.0.0.1:8000/incident-manager/write/
 ```
 psql 'postgresql://postgres:'$INCIDENT_MANAGER_DB_PASSWORD_POSTGRES_USER'@test.ckbossqz7fdb.us-east-1.rds.amazonaws.com/incident_manager'
 select * from incident_manager_incident;
+```
+
+### Start the Django Server
+
+```
+# from root of this repo
+cd incident
+pip install -r requirements.txt
+export DJANGO_SETTINGS_MODULE="incident.settings_dev"
+python3 manage.py runserver
 ```
 
 ### Query the PagerDuty API and display results

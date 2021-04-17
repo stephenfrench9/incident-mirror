@@ -61,6 +61,7 @@ python3 manage.py runserver
 ### Start the Gunicorn Server
 
 ```
+export DJANGO_SETTINGS_MODULE="incident.settings_dev"
 sh start_incident_manager.sh
 ps -A | grep Incident
 ```
@@ -74,17 +75,40 @@ in ready_django_settings.py, set
 loglevel = 'info'
 proc_name = 'Incident-Manager'
 workers = 3
-bind = 'localhost:8001'
+bind = 'localhost:8000'
 ```
 
 https://docs.gunicorn.org/en/stable/signals.html
 ```
 kill -s HUP $(ps -A | grep 'gunicorn: master \[Incident-Manager_debug\]' | awk '{print $1}')
 lsof -i -P -n | grep LISTEN
-lsof -i:8001
+lsof -i:8000
 ```
 
-note: setproctitle is [installed](https://pypi.org/project/setproctitle/) in requirements.txt
+nnote: setproctitle is [installed](https://pypi.org/project/setproctitle/) in requirements.txt
+
+### Nginx
+
+
+```
+cd <django-project-root>/incident/
+nginx -c $(pwd)/nginx.conf
+lsof -i -P -n | grep LISTEN
+cat /Users/stephen.french/invitae-incident/nginx.pid
+```
+
+```
+nginx -c $(pwd)/nginx.conf -s reload
+nginx -c $(pwd)/nginx.conf -s quit
+```
+
+#### nginx resources
+
+https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/
+
+[in which context does the pid directive go? main](http://nginx.org/en/docs/ngx_core_module.html#pid)
+
+https://nginx.org/en/docs/beginners_guide.html
 
 ### Query the PagerDuty API and display results
 

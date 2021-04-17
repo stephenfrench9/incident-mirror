@@ -28,7 +28,7 @@ with open('incident/settings_prod.py') as f:
 loglevel = 'info'
 proc_name = 'Incident-Manager'
 workers = 20
-bind = 'localhost:8001'
+bind = 'localhost:8000'
 
 if settings_dict['DEBUG']:
     loglevel = 'debug'

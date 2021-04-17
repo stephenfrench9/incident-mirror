@@ -3,3 +3,4 @@ django
 gunicorn
 pdpyras
 slack-sdk
+setproctitle

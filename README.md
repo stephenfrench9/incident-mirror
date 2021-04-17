@@ -58,6 +58,34 @@ export DJANGO_SETTINGS_MODULE="incident.settings_dev"
 python3 manage.py runserver
 ```
 
+### Start the Gunicorn Server
+
+```
+sh start_incident_manager.sh
+ps -A | grep Incident
+```
+
+Modify gunicorn settings by modifying read_django_settings.py.
+These are the available [gunicorn settings](https://docs.gunicorn.org/en/stable/settings.html#)
+
+in ready_django_settings.py, set
+
+```
+loglevel = 'info'
+proc_name = 'Incident-Manager'
+workers = 3
+bind = 'localhost:8001'
+```
+
+https://docs.gunicorn.org/en/stable/signals.html
+```
+kill -s HUP $(ps -A | grep 'gunicorn: master \[Incident-Manager_debug\]' | awk '{print $1}')
+lsof -i -P -n | grep LISTEN
+lsof -i:8001
+```
+
+note: setproctitle is [installed](https://pypi.org/project/setproctitle/) in requirements.txt
+
 ### Query the PagerDuty API and display results
 
 ```
@@ -73,7 +101,7 @@ This endpoint is currently configured to return a list of all Users in the accou
 curl -v http://127.0.0.1:8000/incident-manager/post-to-slack/
 ```
 
-or surf to http://127.0.0.1:8000/incident-manager/post-to-slack/ in Google Chrome
+or surf to http://127.0.0.1:8000/incident-manager/post-to-slack/ in Google Chrome [click](#local-development-environment)
 
 This endpoint is currently configured to post a simple message to a Slack channel in the Heuristics workspace.
 
